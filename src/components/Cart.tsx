@@ -1,8 +1,17 @@
-import { useLocation } from "react-router"
+import { useLocation, useNavigate } from "react-router"
 import styles from "./Cart.module.css"
+import { mainData } from "../types/mainData"
+import { Dispatch, SetStateAction } from "react"
 
-function Cart({item, setCartData, data}) {
+interface paramsInt {
+    item: mainData,
+    setCartData: Dispatch<SetStateAction<string | mainData[]>>,
+    data: mainData[]
+}
 
+function Cart({item, setCartData, data} : paramsInt) {
+
+    const navigation = useNavigate()
     const location = useLocation()
 
     return (
@@ -32,7 +41,8 @@ function Cart({item, setCartData, data}) {
             </div>
             <div className={styles.buttons}>
                 <button className={`${styles.editBtn} ${styles.btn}`} onClick={() => {
-
+                    location.state = { id: item.id, data: data }
+                    navigation("/cart/:" + item.id, {state: location.state})
                 }}>Редактировать</button>
                 <button className={`${styles.deleteBtn} ${styles.btn}`} onClick={() => {
                     setCartData(data.filter((elem) => {
